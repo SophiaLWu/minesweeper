@@ -105,6 +105,10 @@ p {
   display: block;
 }
 
+.current-board-size {
+  background: #e8e8e8;
+}
+
 
 
 /* Buttons and Links */

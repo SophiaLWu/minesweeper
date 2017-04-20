@@ -228,6 +228,8 @@ var gameOptions = {
         default:
           return;
       }
+      $(".board-size-type").removeClass("current-board-size");
+      $(this).addClass("current-board-size");
       $(".board-size-dropdown").removeClass("show-dropdown");
     });
   },
