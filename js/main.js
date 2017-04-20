@@ -46,14 +46,9 @@ var board = {
       for (var j = 0; j < this.size; j++) {
         if (this.board[i][j] != "M") {
           var count = 0;
-          if (this.isMine(i - 1, j - 1)) count += 1;
-          if (this.isMine(i - 1, j)) count += 1;
-          if (this.isMine(i - 1, j + 1)) count += 1;
-          if (this.isMine(i, j - 1)) count += 1;
-          if (this.isMine(i, j + 1)) count += 1;
-          if (this.isMine(i + 1, j - 1)) count += 1;
-          if (this.isMine(i + 1, j)) count += 1;
-          if (this.isMine(i + 1, j + 1)) count += 1;
+          this.getSurroundingSquares(i, j).forEach(function(coordinates) {
+            if (board.isMine(coordinates[0], coordinates[1])) count += 1;
+          });
           this.board[i][j] = count;
         }
       }
@@ -86,18 +81,25 @@ var board = {
     } else if (value === 0) {
       $square.find("p").text("").show();
       $square.addClass("revealed");
-      this.showHint(row - 1, col - 1);
-      this.showHint(row - 1, col);
-      this.showHint(row - 1, col + 1);
-      this.showHint(row, col - 1);
-      this.showHint(row, col + 1);
-      this.showHint(row + 1, col - 1);
-      this.showHint(row + 1, col);
-      this.showHint(row + 1, col + 1);
+      board.getSurroundingSquares(row, col).forEach(function(coordinates) {
+        board.showHint(coordinates[0], coordinates[1]);
+      });
     } else {
       $square.find("p").show();
       $square.addClass("revealed");
     }
+  },
+  quickClear: function($square) {
+  },
+  getSurroundingSquares: function(row, col) {
+    return [[row - 1, col - 1],
+            [row - 1, col],
+            [row - 1, col + 1],
+            [row, col - 1],
+            [row, col + 1],
+            [row + 1, col - 1],
+            [row + 1, col],
+            [row + 1, col + 1]];
   },
   showHint: function(row, col) {
     if (row < 0 || row >= this.size || col < 0 || col >= this.size) return;
@@ -152,17 +154,22 @@ var game = {
   },
   clickSquare: function() {
     $(".board-square").mousedown(function() {
+      var $square = $(this);
       if (!game.lose && !game.win) {
         switch (event.which) {
           case 1:
-            board.revealSquare($(this));
-            game.checkLoss($(this));
-            game.checkWin($(this));
+            if ($square.hasClass("revealed")) {
+              board.quickClear($square);
+            } else {
+              board.revealSquare($square);
+            }
+            game.checkLoss($square);
+            game.checkWin($square);
             break;
           case 3:
-            board.addOrRemoveFlag($(this));
+            board.addOrRemoveFlag($square);
             $(".flag-count").text(board.flags);
-            game.checkWin($(this));
+            game.checkWin($square);
             break;
           default:
             return;
