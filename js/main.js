@@ -1,15 +1,17 @@
 
 $(document).ready(function() {
-  game.init();
+  gameOptions.init();
+  game.init(10);
 });
 
 var board = {
   board: [],
-  size: 9,
+  size: 10,
   mineCount: 0,
   mineRatio: 0.2,
-  init: function() {
+  init: function(size) {
     this.board = [];
+    this.size = size;
     $(".board-container").empty();
     this.mineCount = Math.floor(this.size * this.size * this.mineRatio);
     this.newBoard();
@@ -124,8 +126,10 @@ var board = {
 var game = {
   lose: false,
   win: false,
-  init: function() {
-    board.init();
+  size: 10,
+  init: function(size) {
+    game.size = size;
+    board.init(game.size);
     $(".gameover-text h2").text("");
     $("#play-again-btn").hide();
     game.lose = false;
@@ -178,6 +182,53 @@ var game = {
     }
   },
   playAgain: function() {
-    $("#play-again-btn").on("click", game.init);
+    $("#play-again-btn").on("click", function() {
+      game.init(game.size);
+    });
+  },
+};
+
+var gameOptions = {
+  init: function() {
+    this.boardSizeDropdown();
+    this.chooseBoardSize();
+  },
+  boardSizeDropdown: function() {
+    $("#board-size-btn").on("click", function() {
+      $(".board-size-dropdown").toggleClass("show-dropdown");
+    });
+
+    $(document).mouseup(function(e) {
+      var $dropdown = $(".board-size-dropdown");
+      if (!$dropdown.is(e.target) && !$("#board-size-btn").is(e.target) &&
+          $dropdown.has(e.target).length === 0) {
+        $dropdown.removeClass("show-dropdown");
+      }
+    });
+  },
+  chooseBoardSize: function() {
+    $(".board-size-type").on("click", function() {
+      console.log($(this).text());
+      switch($(this).text()) {
+        case "Tiny":
+          game.init(5);
+          break;
+        case "Small":
+          game.init(10);
+          break;
+        case "Medium":
+          game.init(15);
+          break;
+        case "Large":
+          game.init(23);
+          break;
+        case "Enormous":
+          game.init(35);
+          break;
+        default:
+          return;
+      }
+      $(".board-size-dropdown").removeClass("show-dropdown");
+    });
   },
 };
