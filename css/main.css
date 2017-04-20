@@ -65,6 +65,25 @@ p {
 }
 
 
+
+/* Buttons and Links */
+
+button {
+  font-family: 'Fjalla One', sans-serif;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #fff;
+}
+
+button:active, button:focus {
+  outline: none;
+}
+
+
+
 /* Board */
 
 .board-wrapper {
@@ -99,8 +118,27 @@ p {
 
 
 
-/* Gameover Text */
+/* Gameover Screen */
 
 .gameover-container {
   margin-top: 30px;
 }
+
+.gameover-text {
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.play-again {
+  height: 55px;
+}
+
+#play-again-btn {
+  display: none;
+  height: 50px;
+  padding: 10px;
+  border: 0;
+  box-shadow: 2px 2px 2px #000;
+  vertical-align: middle;
+}
+

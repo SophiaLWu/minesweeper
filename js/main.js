@@ -1,8 +1,5 @@
 
 $(document).ready(function() {
-  $(document).on("contextmenu", function(e) {
-    e.preventDefault();
-  }, false);
   game.init();
 });
 
@@ -13,11 +10,13 @@ var board = {
   mineRatio: 0.2,
   init: function() {
     this.board = [];
+    $(".board-container").empty();
     this.mineCount = Math.floor(this.size * this.size * this.mineRatio);
     this.newBoard();
     this.addMines();
     this.addHints();
     this.renderBoard();
+    this.preventRightClickMenu();
   },
   newBoard: function() {
     for (var i = 0; i < this.size; i++) {
@@ -115,6 +114,11 @@ var board = {
       if (!$square.hasClass("revealed")) $square.addClass("flagged");
     }
   },
+  preventRightClickMenu: function() {
+    $(".board").on("contextmenu", function(e) {
+      e.preventDefault();
+    }, false);
+  },
 };
 
 var game = {
@@ -122,7 +126,11 @@ var game = {
   win: false,
   init: function() {
     board.init();
-    if (!this.lose) this.clickSquare();
+    $(".gameover-text h2").text("");
+    $("#play-again-btn").hide();
+    game.lose = false;
+    game.win = false;
+    game.clickSquare();
   },
   clickSquare: function() {
     $(".board-square").mousedown(function() {
@@ -161,8 +169,15 @@ var game = {
   gameoverScreen: function() {
     if (game.win) {
       $(".gameover-text h2").text("You win!");
+      $("#play-again-btn").show();
+      game.playAgain();
     } else if (game.lose) {
       $(".gameover-text h2").text("You lose!");
+      $("#play-again-btn").show();
+      game.playAgain();
     }
+  },
+  playAgain: function() {
+    $("#play-again-btn").on("click", game.init);
   },
 };
