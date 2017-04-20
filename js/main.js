@@ -8,9 +8,9 @@ $(document).ready(function() {
 
 var board = {
   board: [],
-  size: 9,
+  size: 3,
   mineCount: 0,
-  mineRatio: 0.3,
+  mineRatio: 0.2,
   init: function() {
     this.board = [];
     this.mineCount = Math.floor(this.size * this.size * this.mineRatio);
@@ -109,27 +109,56 @@ var board = {
     }
   },
   addFlag: function($square) {
-    $square.addClass("flagged");
+    if (!$square.hasClass("revealed")) $square.addClass("flagged");
   },
 };
 
 var game = {
+  lose: false,
+  win: false,
   init: function() {
     board.init();
-    this.clickSquare();
+    if (!this.lose) this.clickSquare();
   },
   clickSquare: function() {
     $(".board-square").mousedown(function() {
-      switch (event.which) {
-        case 1:
-          board.revealSquare($(this));
-          break;
-        case 3:
-          board.addFlag($(this));
-          break;
-        default:
-          return
+      if (!game.lose && !game.win) {
+        switch (event.which) {
+          case 1:
+            board.revealSquare($(this));
+            game.checkLoss($(this));
+            game.checkWin($(this));
+            break;
+          case 3:
+            board.addFlag($(this));
+            game.checkWin($(this));
+            break;
+          default:
+            return;
+        }
+        game.gameoverScreen();
       }
     });
+  },
+  checkLoss: function($square) {
+    if ($square.text() === "M") game.lose = true;
+  },
+  checkWin: function() {
+    var win = true;
+    $(".board-square").each(function() {
+      if (($(this).text() != "M" && !$(this).hasClass("revealed")) ||
+         ($(this).text() === "M" && !$(this).hasClass("flagged"))) {
+        win = false;
+        return false;
+      }
+    });
+    if (win) game.win = true;
+  },
+  gameoverScreen: function() {
+    if (game.win) {
+      $(".gameover-container").text("You win!");
+    } else if (game.lose) {
+      $(".gameover-container").text("You lose!");
+    }
   },
 };
