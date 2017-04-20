@@ -192,6 +192,7 @@ var gameOptions = {
   init: function() {
     this.boardSizeDropdown();
     this.chooseBoardSize();
+    this.newGame();
   },
   boardSizeDropdown: function() {
     $("#board-size-btn").on("click", function() {
@@ -231,6 +232,11 @@ var gameOptions = {
       $(".board-size-type").removeClass("current-board-size");
       $(this).addClass("current-board-size");
       $(".board-size-dropdown").removeClass("show-dropdown");
+    });
+  },
+  newGame: function() {
+    $("#new-game-btn").on("click", function() {
+      game.init(game.size);
     });
   },
 };

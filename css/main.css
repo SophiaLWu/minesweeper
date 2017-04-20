@@ -22,7 +22,7 @@ header {
 
 
 
-/* Font, color, styling */
+/* Font, Color, Styling */
 
 body {
   background: #51617c;
@@ -66,10 +66,42 @@ p {
 
 
 
+
+/* Buttons and Links */
+
+button {
+  padding: 10px;
+  border: 0;
+  box-shadow: 2px 2px 2px #000;
+  vertical-align: middle;
+  font-family: 'Fjalla One', sans-serif;
+  font-size: 20px;
+  outline: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #fff;
+}
+
+button:active, button:focus {
+  outline: none;
+}
+
+
+
 /* Game Options */
 
 .game-options-wrapper {
   margin-bottom: 30px;
+}
+
+.game-option {
+  display: inline-block;
+}
+
+.game-option:first-child {
+  margin-right: 50px;
 }
 
 
@@ -107,29 +139,6 @@ p {
 
 .current-board-size {
   background: #e8e8e8;
-}
-
-
-
-/* Buttons and Links */
-
-button {
-  padding: 10px;
-  border: 0;
-  box-shadow: 2px 2px 2px #000;
-  vertical-align: middle;
-  font-family: 'Fjalla One', sans-serif;
-  font-size: 20px;
-  outline: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #fff;
-}
-
-button:active, button:focus {
-  outline: none;
 }
 
 
