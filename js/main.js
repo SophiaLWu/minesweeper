@@ -127,14 +127,20 @@ var game = {
   lose: false,
   win: false,
   size: 10,
+  time: 0,
+  timer: "default",
   init: function(size) {
     game.size = size;
+    game.time = 0;
+    $(".time").text(game.time);
     board.init(game.size);
     $(".gameover-text h2").text("");
     $("#play-again-btn").hide();
     game.lose = false;
     game.win = false;
     game.clickSquare();
+    clearInterval(game.timer);
+    game.startTimer();
   },
   clickSquare: function() {
     $(".board-square").mousedown(function() {
@@ -185,6 +191,17 @@ var game = {
     $("#play-again-btn").on("click", function() {
       game.init(game.size);
     });
+  },
+  startTimer: function() {
+    game.timer = setTimeout(function() {
+      if (!game.win && !game.lose) {
+        game.time += 1;
+        $(".time").text(game.time);
+      } else {
+        clearInterval(game.timer);
+      }
+      game.startTimer();
+    }, 1000);
   },
 };
 
