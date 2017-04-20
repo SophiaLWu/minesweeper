@@ -9,11 +9,13 @@ var board = {
   size: 10,
   mineCount: 0,
   mineRatio: 0.2,
+  flags: 0,
   init: function(size) {
     this.board = [];
     this.size = size;
     $(".board-container").empty();
     this.mineCount = Math.floor(this.size * this.size * this.mineRatio);
+    this.flags = this.mineCount;
     this.newBoard();
     this.addMines();
     this.addHints();
@@ -112,8 +114,10 @@ var board = {
   addOrRemoveFlag: function($square) {
     if ($square.hasClass("flagged")) {
       $square.removeClass("flagged");
+      board.flags += 1;
     } else {
       if (!$square.hasClass("revealed")) $square.addClass("flagged");
+      board.flags -= 1;
     }
   },
   preventRightClickMenu: function() {
@@ -132,15 +136,19 @@ var game = {
   init: function(size) {
     game.size = size;
     game.time = 0;
-    $(".time").text(game.time);
     board.init(game.size);
-    $(".gameover-text h2").text("");
-    $("#play-again-btn").hide();
+    game.pageText();
     game.lose = false;
     game.win = false;
     game.clickSquare();
     clearInterval(game.timer);
     game.startTimer();
+  },
+  pageText: function() {
+    $(".flag-count").text(board.flags);
+    $(".time").text(game.time);
+    $(".gameover-text h2").text("");
+    $("#play-again-btn").hide();
   },
   clickSquare: function() {
     $(".board-square").mousedown(function() {
@@ -153,6 +161,7 @@ var game = {
             break;
           case 3:
             board.addOrRemoveFlag($(this));
+            $(".flag-count").text(board.flags);
             game.checkWin($(this));
             break;
           default:
