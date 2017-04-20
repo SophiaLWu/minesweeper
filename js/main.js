@@ -1,5 +1,8 @@
 
 $(document).ready(function() {
+  $(document).on("contextmenu", function(e) {
+    e.preventDefault();
+  }, false);
   game.init();
 });
 
@@ -70,6 +73,7 @@ var board = {
     }
   },
   revealSquare: function($square) {
+    $square.removeClass("flagged");
     var row = $square.data("row");
     var col = $square.data("col");
     var value = board.board[row][col];
@@ -94,7 +98,7 @@ var board = {
   },
   showHint: function(row, col) {
     if (row < 0 || row >= this.size || col < 0 || col >= this.size) return;
-    var $square = $(".board-square[data-r ow='" + row + "'][data-col='" + col + "']");
+    var $square = $(".board-square[data-row='" + row + "'][data-col='" + col + "']");
     if ($square.text() != "M" && !$square.hasClass("revealed")) {
       if ($square.text() === "0") {
         board.revealSquare($square);
@@ -104,6 +108,9 @@ var board = {
       }
     }
   },
+  addFlag: function($square) {
+    $square.addClass("flagged");
+  },
 };
 
 var game = {
@@ -112,8 +119,17 @@ var game = {
     this.clickSquare();
   },
   clickSquare: function() {
-    $(".board-square").on("click", function() {
-      board.revealSquare($(this));
+    $(".board-square").mousedown(function() {
+      switch (event.which) {
+        case 1:
+          board.revealSquare($(this));
+          break;
+        case 3:
+          board.addFlag($(this));
+          break;
+        default:
+          return
+      }
     });
   },
 };

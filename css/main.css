@@ -11,6 +11,10 @@
   background: gray;
 }
 
+.flagged {
+  background: red;
+}
+
 
 /* Board */
 
