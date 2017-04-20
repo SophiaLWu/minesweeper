@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 var board = {
   board: [],
-  size: 3,
+  size: 9,
   mineCount: 0,
   mineRatio: 0.2,
   init: function() {
@@ -78,8 +78,8 @@ var board = {
     var col = $square.data("col");
     var value = board.board[row][col];
     if (value === "M") {
-      $square.find("p").show()
       $square.addClass("revealed");
+      $square.addClass("mine");
     } else if (value === 0) {
       $square.find("p").text("").show();
       $square.addClass("revealed");
@@ -108,8 +108,12 @@ var board = {
       }
     }
   },
-  addFlag: function($square) {
-    if (!$square.hasClass("revealed")) $square.addClass("flagged");
+  addOrRemoveFlag: function($square) {
+    if ($square.hasClass("flagged")) {
+      $square.removeClass("flagged");
+    } else {
+      if (!$square.hasClass("revealed")) $square.addClass("flagged");
+    }
   },
 };
 
@@ -130,7 +134,7 @@ var game = {
             game.checkWin($(this));
             break;
           case 3:
-            board.addFlag($(this));
+            board.addOrRemoveFlag($(this));
             game.checkWin($(this));
             break;
           default:
@@ -156,9 +160,9 @@ var game = {
   },
   gameoverScreen: function() {
     if (game.win) {
-      $(".gameover-container").text("You win!");
+      $(".gameover-text h2").text("You win!");
     } else if (game.lose) {
-      $(".gameover-container").text("You lose!");
+      $(".gameover-text h2").text("You lose!");
     }
   },
 };

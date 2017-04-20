@@ -1,38 +1,106 @@
 
+/* Layout and Positioning */
+
 *,
 *:before,
 *:after {
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
+body {
+  text-align: center;
+}
+
+header {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+
+
 /* Font, color, styling */
 
+body {
+  background: #51617c;
+  background: -o-linear-gradient(#51737c, #51617c, #51517c);
+  background: -moz-linear-gradient(#51737c, #51617c, #51517c);
+  background: -webkit-linear-gradient(#51737c, #51617c, #51517c);
+  background: linear-gradient(#51737c, #51617c, #51517c);
+  color: #e8e8e8;
+  font-family: 'Fjalla One', sans-serif;
+}
+
+h1 {
+  text-shadow: 3px 3px #000;
+  font-size: 70px;
+}
+
+h2 {
+  text-shadow: 2px 2px #000;
+  font-size: 40px;
+}
+
+p {
+  color: #000;
+}
+
 .revealed {
-  background: gray;
+  background: #cccccc;
 }
 
 .flagged {
-  background: red;
+  background-image: url("../images/flag.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.mine {
+  background-image: url("../images/mine.png");
+  background-position: center;
+  background-size: cover;
 }
 
 
 /* Board */
 
-.board-container {
+.board-wrapper {
   width: 100%;
 }
 
+.board-container {
+  display: inline-block;
+  padding: 8px;
+  border: 8px solid black;
+  background: #fff;
+  box-shadow: 4px 4px 4px #000;
+}
+
 .board {
-  border: 1px solid black;
   margin: 0 auto;
+  background: #e8e8e8;
 }
 
 .board td {
+  min-width: 30px;
+  min-height: 30px;
   width: 30px;
   height: 30px;
-  border: 1px solid black;
+  border: 2px solid #000;
+  line-height: 28px;
 }
 
 .board p {
   display: none;
+}
+
+
+
+/* Gameover Text */
+
+.gameover-container {
+  margin-top: 30px;
 }
