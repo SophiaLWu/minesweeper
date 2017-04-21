@@ -46,7 +46,7 @@ var board = {
       for (var j = 0; j < this.size; j++) {
         if (this.board[i][j] != "M") {
           var count = 0;
-          this.getSurroundingSquares(i, j).forEach(function(coordinates) {
+          this.getSurroundingSquareCoords(i, j).forEach(function(coordinates) {
             if (board.isMine(coordinates[0], coordinates[1])) count += 1;
           });
           this.board[i][j] = count;
@@ -81,7 +81,7 @@ var board = {
     } else if (value === 0) {
       $square.find("p").text("").show();
       $square.addClass("revealed");
-      board.getSurroundingSquares(row, col).forEach(function(coordinates) {
+      board.getSurroundingSquareCoords(row, col).forEach(function(coordinates) {
         board.showHint(coordinates[0], coordinates[1]);
       });
     } else {
@@ -90,8 +90,27 @@ var board = {
     }
   },
   quickClear: function($square) {
+    var flags = 0;
+    var notRevealedOrFlagged = [];
+    var surrSquares = board.getSurroundingSquares($square.data("row"), 
+                                                  $square.data("col"));
+    surrSquares.forEach(function($surrSquare) {
+      if ($surrSquare.hasClass("flagged")) {
+        flags += 1;
+      }
+      if (!$surrSquare.hasClass("flagged") && 
+          !$surrSquare.hasClass("revealed")) {
+        notRevealedOrFlagged.push($surrSquare);
+      }
+    });
+    if (flags.toString() === $square.text() &&
+        notRevealedOrFlagged.length > 0) {
+      notRevealedOrFlagged.forEach(function($squareToReveal) {
+        board.revealSquare($squareToReveal);
+      });
+    }
   },
-  getSurroundingSquares: function(row, col) {
+  getSurroundingSquareCoords: function(row, col) {
     return [[row - 1, col - 1],
             [row - 1, col],
             [row - 1, col + 1],
@@ -99,11 +118,22 @@ var board = {
             [row, col + 1],
             [row + 1, col - 1],
             [row + 1, col],
-            [row + 1, col + 1]];
+            [row + 1, col + 1]].filter(function(coordinates) {
+              return coordinates[0] >= 0 && coordinates[0] < board.size &&
+                     coordinates[1] >= 0 && coordinates[1] < board.size;
+            });
+  },
+  getSurroundingSquares: function(row, col) {
+    return board.getSurroundingSquareCoords(row, col)
+                .map(function(coords) {
+                  return $(".board-square[data-row='" + coords[0] + 
+                           "'][data-col='" + coords[1] + "']");
+                });
   },
   showHint: function(row, col) {
     if (row < 0 || row >= this.size || col < 0 || col >= this.size) return;
-    var $square = $(".board-square[data-row='" + row + "'][data-col='" + col + "']");
+    var $square = $(".board-square[data-row='" + row + 
+                    "'][data-col='" + col + "']");
     if ($square.text() != "M" && !$square.hasClass("revealed")) {
       if ($square.text() === "0") {
         board.revealSquare($square);
@@ -163,13 +193,13 @@ var game = {
             } else {
               board.revealSquare($square);
             }
-            game.checkLoss($square);
-            game.checkWin($square);
+            game.checkLoss();
+            game.checkWin();
             break;
           case 3:
             board.addOrRemoveFlag($square);
             $(".flag-count").text(board.flags);
-            game.checkWin($square);
+            game.checkWin();
             break;
           default:
             return;
@@ -178,8 +208,8 @@ var game = {
       }
     });
   },
-  checkLoss: function($square) {
-    if ($square.text() === "M") game.lose = true;
+  checkLoss: function() {
+    if ($(".mine").length > 0) game.lose = true;
   },
   checkWin: function() {
     var win = true;
