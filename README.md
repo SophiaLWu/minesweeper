@@ -3,9 +3,12 @@ This is the classic minesweeper game built using JavaScript as a web game.
 
 This is a project as described in [The Odin Project](http://www.theodinproject.com/courses/javascript-and-jquery/lessons/minesweeper?ref=lnav).
 
+[Play the game!](https://sophialwu.github.io/minesweeper/)
+
 ## Instructions
 
 **Object of the Game**
+
 You are given a board of squares. Some squares contain mines, others don't. You win the game if you can click all of the squares that don't contain any mines. You lose if you click any square containing a mine.
 
 **Gameplay**
