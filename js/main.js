@@ -184,6 +184,7 @@ var game = {
   },
   clickSquare: function() {
     $(".board-square").mousedown(function() {
+      console.log("clicked");
       var $square = $(this);
       if (!game.lose && !game.win) {
         switch (event.which) {
